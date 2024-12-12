@@ -7,6 +7,14 @@ import 'package:intl/intl.dart';
 class ToDoScreen extends StatelessWidget {
   final TextEditingController _taskController = TextEditingController();
 
+  void _handleUpdateTodo(Todoitem todo, TodoProvider todoProvider) {
+    todoProvider.updateTodo(Todoitem(
+      id: todo.id,
+      content: todo.content,
+      completed: !todo.completed,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     final todoProvider = Provider.of<TodoProvider>(context);
@@ -27,11 +35,10 @@ class ToDoScreen extends StatelessWidget {
             color: Colors.white.withOpacity(0.2),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.only(top: 60.0, left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 60),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -58,20 +65,13 @@ class ToDoScreen extends StatelessWidget {
                     Icon(Icons.settings, color: Colors.black54),
                   ],
                 ),
-                const SizedBox(height: 20),
                 Expanded(
                     child: ListView.builder(
                   itemCount: todoProvider.todos.length,
                   itemBuilder: (context, index) {
                     final todo = todoProvider.todos[index];
                     return InkWell(
-                      onTap: () => {
-                        todoProvider.updateTodo(Todoitem(
-                          id: todo.id,
-                          content: todo.content,
-                          completed: !todo.completed,
-                        ))
-                      },
+                      onTap: () => _handleUpdateTodo(todo, todoProvider),
                       child: ListTile(
                         leading: Checkbox(
                           value: todo.completed,
