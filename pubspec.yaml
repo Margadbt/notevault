@@ -24,3 +24,4 @@ flutter:
   assets: 
     - assets/intro_screen_illustration.png
     - assets/bg_pattern_1.png
+    - assets/yellow_icon.png
