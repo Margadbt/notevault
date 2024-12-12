@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'pin_code_screen.dart';
+import 'package:notevault/screens/guiding_screen1.dart';
 
 class IntroScreen extends StatelessWidget {
+  const IntroScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,45 +18,48 @@ class IntroScreen extends StatelessWidget {
             ),
           ),
           Container(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withOpacity(0.01),
           ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 100),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text(
+                    'NoteVault',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 35,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Image.asset(
                   'assets/intro_screen_illustration.png',
                   height: 400,
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  'Welcome NoteVault',
-                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+                  'Тавтай \nморилно уу!',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
-                const Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: const Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed risus ligula, aliquam eu ex ac, sollicitudin pretium enim.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PinCodeScreen()),
+                      MaterialPageRoute(builder: (context) => GuidingScreen1()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 12),
-                    backgroundColor: Color(0xFF33808C),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 80, vertical: 15),
+                    backgroundColor: const Color(0xFF3B506D),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     shadowColor: Colors.black.withOpacity(0.2),
                     elevation: 10,
