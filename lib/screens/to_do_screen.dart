@@ -1,119 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/todo_provider.dart';
-import '../models/TodoItem.dart';
-import 'package:intl/intl.dart';
 
-class ToDoScreen extends StatelessWidget {
-  final TextEditingController _taskController = TextEditingController();
+class ToDoScreen extends StatefulWidget {
+  const ToDoScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final todoProvider = Provider.of<TodoProvider>(context);
+  State<ToDoScreen> createState() => _ToDoScreenState();
+}
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Background
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/bg_pattern_1.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.white.withOpacity(0.2),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 60),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'To-Do List',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF3B506D),
-                          ),
-                        ),
-                        Text(
-                          'Хийсэн ажлуудаа check-лээрэй ❤️',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF3B506D),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Icon(Icons.settings, color: Colors.black54),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Expanded(
-                    child: ListView.builder(
-                  itemCount: todoProvider.todos.length,
-                  itemBuilder: (context, index) {
-                    final todo = todoProvider.todos[index];
-                    return InkWell(
-                      onTap: () => {
-                        todoProvider.updateTodo(Todoitem(
-                          id: todo.id,
-                          content: todo.content,
-                          completed: !todo.completed,
-                        ))
-                      },
-                      child: ListTile(
-                        leading: Checkbox(
-                          value: todo.completed,
-                          onChanged: (value) {
-                            todoProvider.updateTodo(Todoitem(
-                              id: todo.id,
-                              content: todo.content,
-                              completed: value!,
-                            ));
-                          },
-                        ),
-                        title: Text(
-                          todo.content,
-                          style: TextStyle(
-                            decoration: todo.completed
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                            color: todo.completed ? Colors.grey : Colors.black,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                )),
-              ],
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF3E7C78),
-        onPressed: () => _showAddTaskDialog(context, todoProvider),
-        shape: const CircleBorder(),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
+class _ToDoScreenState extends State<ToDoScreen> {
+  final List<Map<String, dynamic>> _tasks = [];
 
-  void _showAddTaskDialog(BuildContext context, TodoProvider todoProvider) {
+  final TextEditingController _taskController = TextEditingController();
+
+  void _showAddTaskDialog() {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -168,12 +67,14 @@ class ToDoScreen extends StatelessWidget {
                       width: 300,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () async {
+                        onPressed: () {
                           if (_taskController.text.isNotEmpty) {
-                            await todoProvider.addTodo(Todoitem(
-                              content: _taskController.text,
-                              completed: false,
-                            ));
+                            setState(() {
+                              _tasks.add({
+                                'title': _taskController.text,
+                                'completed': false,
+                              });
+                            });
                             _taskController.clear();
                             Navigator.pop(context);
                           }
@@ -198,6 +99,106 @@ class ToDoScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Background
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/bg_pattern_1.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.white.withOpacity(0.2),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 60),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'To-Do List',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF3B506D),
+                          ),
+                        ),
+                        Text(
+                          'Хийсэн ажлуудаа check-лээрэй ❤️',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF3B506D),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.settings, color: Colors.black54),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _tasks.length,
+                    itemBuilder: (context, index) {
+                      return RadioListTile(
+                        value: true,
+                        groupValue: _tasks[index]['completed'],
+                        onChanged: (value) {
+                          setState(() {
+                            if (_tasks[index]['completed'] == true) {
+                              _tasks[index]['completed'] = false;
+                            } else {
+                              _tasks[index]['completed'] = true;
+                            }
+                          });
+                        },
+                        title: Text(
+                          _tasks[index]['title'],
+                          style: TextStyle(
+                            decoration: _tasks[index]['completed']
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            color: _tasks[index]['completed']
+                                ? Colors.grey
+                                : Colors.black,
+                          ),
+                        ),
+                        activeColor: const Color(0xFF3E7C78),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      // dialog нэмэх button
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF3E7C78),
+        onPressed: _showAddTaskDialog,
+        shape: const CircleBorder(),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }

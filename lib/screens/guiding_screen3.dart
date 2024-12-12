@@ -48,7 +48,7 @@ class GuidingScreen3 extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PinCodeScreen()),
+                                  builder: (context) => const PinCodeScreen()),
                             );
                           },
                           child: const Text(

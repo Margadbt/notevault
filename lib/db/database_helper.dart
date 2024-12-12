@@ -1,4 +1,3 @@
-import 'package:notevault/models/TodoItem.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/note.dart';
@@ -24,21 +23,13 @@ class DatabaseHelper {
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-    CREATE TABLE notes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      content TEXT NOT NULL,
-      mood TEXT NOT NULL,
-      timestamp TEXT NOT NULL
-    )
-  ''');
-
-    await db.execute('''
-    CREATE TABLE todos (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      content TEXT NOT NULL,
-      completed INTEGER NOT NULL DEFAULT 0
-    )
-  ''');
+      CREATE TABLE notes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        content TEXT NOT NULL,
+        mood TEXT NOT NULL,
+        timestamp TEXT NOT NULL
+      )
+    ''');
   }
 
   Future<int> insertNote(Note note) async {
@@ -55,36 +46,5 @@ class DatabaseHelper {
   Future<int> deleteNoteById(int id) async {
     final db = await instance.database;
     return await db.delete('notes', where: 'id = ?', whereArgs: [id]);
-  }
-
-  Future<int> insertTodo(Todoitem todo) async {
-    final db = await instance.database;
-    return await db.insert('todos', todo.toMap());
-  }
-
-  Future<int> updateTodo(Todoitem todo) async {
-    final db = await instance.database;
-
-    final updatedTodo = {
-      'completed': todo.completed ? 1 : 0,
-    };
-
-    return await db.update(
-      'todos',
-      updatedTodo,
-      where: 'id = ?',
-      whereArgs: [todo.id],
-    );
-  }
-
-  Future<List<Todoitem>> fetchTodos() async {
-    final db = await instance.database;
-    final maps = await db.query('todos');
-    return maps.map((map) => Todoitem.fromMap(map)).toList();
-  }
-
-  Future<int> deleteTodoById(int id) async {
-    final db = await instance.database;
-    return await db.delete('todos', where: 'id = ?', whereArgs: [id]);
   }
 }
