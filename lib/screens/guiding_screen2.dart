@@ -49,7 +49,7 @@ class GuidingScreen2 extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const PinCodeScreen()),
+                                  builder: (context) => PinCodeScreen()),
                             );
                           },
                           child: const Text(
