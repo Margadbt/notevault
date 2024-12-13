@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen.dart';
 
 class PinCodeScreen extends StatefulWidget {
@@ -8,6 +9,28 @@ class PinCodeScreen extends StatefulWidget {
 
 class _PinCodeScreenState extends State<PinCodeScreen> {
   final List<String> _pin = [];
+  String? storedPin;
+  bool _isPinSet = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfPinSet();
+  }
+
+  Future<void> _checkIfPinSet() async {
+    final prefs = await SharedPreferences.getInstance();
+    storedPin = prefs.getString('pin');
+    setState(() {
+      _isPinSet = storedPin != null;
+    });
+  }
+
+  Future<void> _registerPin() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('pin', _pin.join());
+    _navigateToHomeScreen();
+  }
 
   void _onNumberPress(String number) {
     if (_pin.length < 4) {
@@ -16,10 +39,33 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
       });
     }
     if (_pin.length == 4) {
-      _navigateToHomeScreen();
+      if (!_isPinSet) {
+        _registerPin();
+      } else {
+        String enteredPin = _pin.join();
+        if (enteredPin == storedPin) {
+          _navigateToHomeScreen();
+        } else {
+          _onPinFailure();
+        }
+        setState(() {
+          _pin.clear();
+        });
+      }
     }
   }
 
+  void _onPinFailure() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Pin Code Буруу байна.'),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  // Handle delete press
   void _onDeletePress() {
     if (_pin.isNotEmpty) {
       setState(() {
@@ -28,6 +74,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     }
   }
 
+  // Navigate to Home Screen
   void _navigateToHomeScreen() {
     Navigator.pushReplacement(
       context,
@@ -40,6 +87,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     return Scaffold(
       body: Stack(
         children: [
+          // Background
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -60,13 +108,20 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                   style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(
-                    'Цаашид ашиглах нууц кодоо оруулна уу!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.black54),
-                  ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: !_isPinSet
+                      ? Text(
+                          'Цаашид ашиглах нууц кодоо оруулна уу!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16, color: Colors.black54),
+                        )
+                      : Text(
+                          'Pin code-оо оруулж нэвтэрнэ үү!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16, color: Colors.black54),
+                        ),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -111,6 +166,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     );
   }
 
+  // Build the number pad
   Widget _buildNumberPad() {
     return Column(
       children: [
@@ -120,6 +176,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     );
   }
 
+  // Build a row of number buttons
   Widget _buildNumberRow(int start) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -130,6 +187,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     );
   }
 
+  // Build the last row with '0' and delete button
   Widget _buildLastRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -145,6 +203,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     );
   }
 
+  // Build the individual number button
   Widget _buildNumberButton(String number) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
