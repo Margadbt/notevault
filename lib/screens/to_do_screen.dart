@@ -26,6 +26,7 @@ class ToDoScreen extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
+                opacity: 0.3,
                 image: AssetImage('assets/bg_pattern_1.png'),
                 fit: BoxFit.cover,
               ),

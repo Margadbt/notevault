@@ -144,17 +144,20 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                 const SizedBox(height: 40),
                 _buildNumberPad(),
                 const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _pin.clear();
-                      });
-                    },
-                    child: const Text(
-                      'Болих',
-                      style: TextStyle(color: Colors.black54, fontSize: 16),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _pin.clear();
+                        });
+                      },
+                      child: const Text(
+                        'Болих',
+                        style: TextStyle(color: Colors.black54, fontSize: 16),
+                      ),
                     ),
                   ),
                 ),

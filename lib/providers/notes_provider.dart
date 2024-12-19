@@ -17,7 +17,8 @@ class NotesProvider with ChangeNotifier {
     await loadNotes();
   }
 
-  Future<void> deleteNoteById(int id) async {
+  Future<void> deleteNoteById(int? id) async {
+    print("is deleted $id");
     await DatabaseHelper.instance.deleteNoteById(id);
     await loadNotes();
   }

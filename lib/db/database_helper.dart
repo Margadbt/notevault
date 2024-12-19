@@ -52,7 +52,7 @@ class DatabaseHelper {
     return maps.map((map) => Note.fromMap(map)).toList();
   }
 
-  Future<int> deleteNoteById(int id) async {
+  Future<int> deleteNoteById(int? id) async {
     final db = await instance.database;
     return await db.delete('notes', where: 'id = ?', whereArgs: [id]);
   }
