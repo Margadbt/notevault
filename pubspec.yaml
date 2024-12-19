@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   dotted_border: ^2.1.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -26,3 +27,4 @@ flutter:
   uses-material-design: true
   assets: 
     - assets/
+    - assets/emoji

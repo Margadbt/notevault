@@ -1,13 +1,13 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:notevault/screens/mood_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import '../providers/notes_provider.dart';
 import '../models/note.dart';
 import './to_do_screen.dart';
 import './mood_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:notevault/providers/notes_provider.dart';
 
 class NoteDetailScreen extends StatefulWidget {
   final Note? note;
@@ -29,7 +29,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
-
     return Scaffold(
       body: Stack(
         children: [
@@ -90,13 +89,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                             Navigator.pop(context);
                           }
                         },
-                        child: Text("Хадгалах",
+                        child: const Text("Хадгалах",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w500)),
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   // Wrap TextFormField with Expanded to make it fill the remaining space
@@ -108,7 +107,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         child: TextFormField(
                           controller: _contentController,
                           maxLines: null, // Allow multiline input
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             enabledBorder:
                                 InputBorder.none, // Removes the default border

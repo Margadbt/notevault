@@ -4,10 +4,11 @@ import 'package:notevault/screens/mood_screen.dart';
 import 'package:notevault/screens/note_detail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import '../providers/notes_provider.dart';
+// import '../providers/notes_provider.dart';
 import '../models/note.dart';
 import './to_do_screen.dart';
 import './mood_screen.dart';
+import 'package:notevault/providers/notes_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
